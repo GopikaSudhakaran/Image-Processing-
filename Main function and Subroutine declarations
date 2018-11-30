@@ -1,0 +1,79 @@
+#include "stdafx.h"
+#include "cv.h"
+#include "cxcore.h"
+#include "highgui.h"
+#include < math.h >
+#include "opencv2/opencv.hpp"
+#include "iostream"
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <imgproc\imgproc.hpp>
+#include <tserial.h>
+#include <bot_control.h>
+
+
+using namespace std;
+ using namespace cv; //serial is a class type defined in these files, used for referring to the communication device
+ serial comm;
+
+void DetectAndDrawQuads(IplImage* img);
+int colour_detect_1(IplImage* frame);
+int colour_detect_2(IplImage* frame,CvSeq* result);
+int arrow_detect(IplImage* frame,CvSeq* contours,CvSeq* result,int flag);
+void shape_detect(IplImage *frame,CvSeq* result,int flag);
+int sh_detect,sh_check;
+int sh_counter=0;
+int co_inc;
+char dir;
+int fin=0;
+unsigned long int GetThresholdedImage_1(IplImage* imgHSV,double minhue,double maxhue);
+IplImage* GetThresholdedImage_2(IplImage* imgHSV);
+
+
+int main()
+{
+	unsigned char data;
+	comm.startDevice("COM3", 9600);
+	CvCapture* capture =cvCreateCameraCapture(0);
+	IplImage* img;
+	while(1)
+	{
+		
+	comm.get_data(&data);
+	
+	//printf("Capture failure\n");
+
+	  img = cvQueryFrame(capture);           
+              
+    if(!img) printf("\nNo image");
+	cvNamedWindow("win1",CV_WINDOW_AUTOSIZE);
+                    
+             cvShowImage("win1",img);
+	//img=cvCloneImage(img); 
+           cvErode(img,img,NULL,3);
+cvDilate(img,img,NULL,3);
+
+            cvSmooth(img, img, CV_GAUSSIAN,3,0,0,0); //smooth the original image using Gaussian kernel
+			
+            // contourDrawn= cvCreateImage(cvGetSize(img), IPL_DEPTH_8U, 3);
+			 
+     DetectAndDrawQuads(img);
+                     
+	cvWaitKey(1000);
+	
+	cvDestroyAllWindows() ;
+   //cvReleaseCapture(&capture);
+   
+   if(fin==1)
+   break;
+   
+}
+cvDestroyAllWindows() ;
+	cvReleaseImage(&img);
+      comm.stopDevice();
+      return 0;
+}
+
+
+
