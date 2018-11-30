@@ -1,0 +1,63 @@
+int arrow_detect(IplImage* frame,CvSeq* contours,CvSeq* result,int flag)
+{
+	int col;
+	IplImage *img=cvCloneImage(frame);
+	CvPoint *pt[7];
+	
+
+	CvSeq* cur_contour = contours;
+	int ax,bx;
+ for( ; cur_contour != 0; cur_contour = cur_contour->h_next )
+ {
+       CvSeqReader reader;
+	  int cent_x=0,cent_y=0;
+      int total = cur_contour->total;
+       cvStartReadSeq( cur_contour, &reader, 0 ); // read from beginning
+            
+            for(int i=0;i<result->total;i++)
+             {   pt[i] = (CvPoint*)cvGetSeqElem(result, i);
+			cout<<"\npixels:"<<pt[i]->x<<","<<pt[i]->y;
+			cent_x+=pt[i]->x;
+			cent_y+=pt[i]->y;
+			}
+			
+			cent_x/=7;
+			cent_y/=7;
+			cout<<"point0:("<<pt[0]->x<<","<<pt[0]->y<<")";
+			cout<<"centriod:("<<cent_x<<","<<cent_y<<")";
+			if((cent_x) < (pt[0]->x))
+			{	dir='r';}
+			
+			else
+			{	dir='l';}
+	
+/*
+	   for(int  i = 0; i <total; i++ )
+       {
+               CvPoint pt;
+               CV_READ_SEQ_ELEM( pt, reader );
+			   cout<<"("<<pt.x<<","<<pt.y<<")";
+	   }
+	   */
+       
+}
+ if(flag==0)
+	{
+		col=colour_detect_1(img);     // blue=1   green=2   red=3
+	}
+	else
+	{
+		co_inc=0;
+		col=colour_detect_2(img,result); 
+	}
+ if((col==3 && dir=='l') || (col==2 && dir=='r'))
+ {
+	 //turn right
+	 return 0;
+ }
+ else
+ {
+	 //turn left
+	 return 1;
+ }
+}
