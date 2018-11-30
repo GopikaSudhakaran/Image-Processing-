@@ -1,0 +1,48 @@
+
+void shape_detect(IplImage *frame,CvSeq* result,int flag)
+{
+	sh_counter++;
+	int col;
+	IplImage *imag=cvCloneImage(frame);
+	if(flag==0)
+	{
+		col=colour_detect_1(imag);     // blue=1   green=2   red=3
+	}
+	else
+	{co_inc=1;
+		col=colour_detect_2(imag,result); 
+	}
+	//1.triangle(+0)   2.square(+3)   3.circle(+6)
+	if(result->total==3)
+	{
+		col+=0;
+	}
+	else if(result->total==4)
+	{
+		
+		col+=3;
+	}
+	else
+	{
+		col+=6;
+	}
+
+	if(sh_counter==1)
+	{
+		sh_detect=col;
+	}
+	else
+	{
+		sh_check=col;
+		if(sh_detect==sh_check)
+		{
+			//match
+		}
+		else 
+		{
+			//servo motor turn
+		}
+	}
+	cout<<col;
+	 
+}
