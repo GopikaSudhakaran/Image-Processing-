@@ -9,7 +9,8 @@ void shape_detect(IplImage *frame,CvSeq* result,int flag)
 		col=colour_detect_1(imag);     // blue=1   green=2   red=3
 	}
 	else
-	{co_inc=1;
+	{	
+		co_inc=1;
 		col=colour_detect_2(imag,result); 
 	}
 	//1.triangle(+0)   2.square(+3)   3.circle(+6)
@@ -19,7 +20,6 @@ void shape_detect(IplImage *frame,CvSeq* result,int flag)
 	}
 	else if(result->total==4)
 	{
-		
 		col+=3;
 	}
 	else
@@ -36,7 +36,7 @@ void shape_detect(IplImage *frame,CvSeq* result,int flag)
 		sh_check=col;
 		if(sh_detect==sh_check)
 		{
-			//match
+			//match 
 		}
 		else 
 		{
@@ -44,5 +44,4 @@ void shape_detect(IplImage *frame,CvSeq* result,int flag)
 		}
 	}
 	cout<<col;
-	 
 }
