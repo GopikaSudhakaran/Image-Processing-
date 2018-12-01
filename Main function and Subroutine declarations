@@ -14,8 +14,8 @@
 
 
 using namespace std;
- using namespace cv; //serial is a class type defined in these files, used for referring to the communication device
- serial comm;
+using namespace cv; //serial is a class type defined in these files, used for referring to the communication device
+serial comm;
 
 void DetectAndDrawQuads(IplImage* img);
 int colour_detect_1(IplImage* frame);
@@ -39,41 +39,23 @@ int main()
 	IplImage* img;
 	while(1)
 	{
-		
-	comm.get_data(&data);
-	
-	//printf("Capture failure\n");
-
-	  img = cvQueryFrame(capture);           
-              
-    if(!img) printf("\nNo image");
-	cvNamedWindow("win1",CV_WINDOW_AUTOSIZE);
-                    
-             cvShowImage("win1",img);
-	//img=cvCloneImage(img); 
-           cvErode(img,img,NULL,3);
-cvDilate(img,img,NULL,3);
-
-            cvSmooth(img, img, CV_GAUSSIAN,3,0,0,0); //smooth the original image using Gaussian kernel
-			
-            // contourDrawn= cvCreateImage(cvGetSize(img), IPL_DEPTH_8U, 3);
-			 
-     DetectAndDrawQuads(img);
-                     
-	cvWaitKey(1000);
-	
+		comm.get_data(&data);
+		img = cvQueryFrame(capture);           
+              	if(!img) printf("\nNo image");
+		cvNamedWindow("win1",CV_WINDOW_AUTOSIZE);
+                cvShowImage("win1",img);
+		cvErode(img,img,NULL,3);
+		cvDilate(img,img,NULL,3);
+		cvSmooth(img, img, CV_GAUSSIAN,3,0,0,0); //smooth the original image using Gaussian kernel
+		DetectAndDrawQuads(img);
+                cvWaitKey(1000);
+		cvDestroyAllWindows() ;
+   		if(fin==1)
+   			break;
+   
+	}
 	cvDestroyAllWindows() ;
-   //cvReleaseCapture(&capture);
-   
-   if(fin==1)
-   break;
-   
-}
-cvDestroyAllWindows() ;
 	cvReleaseImage(&img);
-      comm.stopDevice();
-      return 0;
+      	comm.stopDevice();
+      	return 0;
 }
-
-
-
