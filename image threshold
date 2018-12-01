@@ -1,38 +1,38 @@
 IplImage* GetThresholdedImage_2(IplImage* img) 
 {      
-IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
-cvCvtColor(img, imgHSV, CV_BGR2HSV);
-IplImage* temp=cvCreateImage(cvGetSize(imgHSV), 8, 3);
-CvScalar s,c;	   
-	for(int i=0;i<(imgHSV->height);i++)//In the 2D array of the img..count till the vertical pixel reaches the height of src
-	{
-		for(int j=0;j<(imgHSV->width);j++)//In the 2D array of the img..count till orizontal pixel reaches the width of src
+	IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
+	cvCvtColor(img, imgHSV, CV_BGR2HSV);
+	IplImage* temp=cvCreateImage(cvGetSize(imgHSV), 8, 3);
+	CvScalar s,c;	   
+		for(int i=0;i<(imgHSV->height);i++)//In the 2D array of the img..count till the vertical pixel reaches the height of src
 		{
-			s=cvGet2D(imgHSV,i,j); //Get the RGB values of src's i,j into a scalar s
-			if(s.val[1]>=160 && s.val[1]<256 && s.val[2]>=70 && s.val[2]<256)
+			for(int j=0;j<(imgHSV->width);j++)//In the 2D array of the img..count till orizontal pixel reaches the width of src
 			{
-				if((s.val[0]>=0 && s.val[0]<38) || (s.val[0]>=38 && s.val[0]<75) || (s.val[0]>90 && s.val[0]<130)) 
+				s=cvGet2D(imgHSV,i,j); //Get the RGB values of src's i,j into a scalar s
+				if(s.val[1]>=160 && s.val[1]<256 && s.val[2]>=70 && s.val[2]<256)
 				{
-		 			//ie. if the pixel is predominantly Green
-					c.val[2]=255;//Set R to 0
-					c.val[1]=255;//Set G to 0
-					c.val[0]=255;//Set B to 0
-					cvSet2D(temp,i,j,c); //Change the pixel value of copy img to pure green(G=255 R=0 B=0)
-				}
-				else //Set all other pixels in copy to white
-				{
-					c.val[2]=0; // Red
-					c.val[1]=0;// Green
-					c.val[0]=0;// Blue
-					cvSet2D(temp,i,j,c); // Now set the scalar c(now white) to the pixel in i,j in copy
-				}
+					if((s.val[0]>=0 && s.val[0]<38) || (s.val[0]>=38 && s.val[0]<75) || (s.val[0]>90 && s.val[0]<130)) 
+					{
+		 				//ie. if the pixel is predominantly Green
+						c.val[2]=255;//Set R to 0
+						c.val[1]=255;//Set G to 0
+						c.val[0]=255;//Set B to 0
+						cvSet2D(temp,i,j,c); //Change the pixel value of copy img to pure green(G=255 R=0 B=0)
+					}
+					else //Set all other pixels in copy to white
+					{
+						c.val[2]=0; // Red
+						c.val[1]=0;// Green
+						c.val[0]=0;// Blue
+						cvSet2D(temp,i,j,c); // Now set the scalar c(now white) to the pixel in i,j in copy
+					}
 
+				}
 			}
 		}
-	}
-cvSmooth(temp, temp, CV_GAUSSIAN,3,0,0,0);
-cvNamedWindow("win3");
-cvShowImage("win3",temp);
-cvReleaseImage(&temp);
-return temp;
+	cvSmooth(temp, temp, CV_GAUSSIAN,3,0,0,0);
+	cvNamedWindow("win3");
+	cvShowImage("win3",temp);
+	cvReleaseImage(&temp);
+	return temp;
 } 
