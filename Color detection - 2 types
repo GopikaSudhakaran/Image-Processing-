@@ -1,20 +1,19 @@
-int colour_detect_1(IplImage* frame){       
-			IplImage *img=cvCloneImage(frame);
-            cvSmooth(img, img, CV_GAUSSIAN,3,3); //smooth the original image using Gaussian kernel
-
-            IplImage* imgHSV = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
-            cvCvtColor(img, imgHSV, CV_BGR2HSV); //Change the color format from BGR to HSV
-            unsigned long int countr = GetThresholdedImage_1(imgHSV,0,38);
-			unsigned long int countg = GetThresholdedImage_1(imgHSV,38,75);
-			unsigned long int countb = GetThresholdedImage_1(imgHSV,75,130);
-			cout<<"BGR:("<<countb<<","<<countg<<","<<countr<<")";
-			if(std::max(countr,std::max(countb,countg))==countr)
-			return 3; 
-			else if(max(countr,max(countb,countg))==countg)
-			return 2;
-			else
-			return 1;
-			  
+int colour_detect_1(IplImage* frame)
+{       
+	IplImage *img=cvCloneImage(frame);
+        cvSmooth(img, img, CV_GAUSSIAN,3,3); //smooth the original image using Gaussian kernel
+	IplImage* imgHSV = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
+        cvCvtColor(img, imgHSV, CV_BGR2HSV); //Change the color format from BGR to HSV
+        unsigned long int countr = GetThresholdedImage_1(imgHSV,0,38);
+	unsigned long int countg = GetThresholdedImage_1(imgHSV,38,75);
+	unsigned long int countb = GetThresholdedImage_1(imgHSV,75,130);
+	cout<<"BGR:("<<countb<<","<<countg<<","<<countr<<")";
+	if(std::max(countr,std::max(countb,countg))==countr)
+		return 3; 
+	else if(max(countr,max(countb,countg))==countg)
+		return 2;
+	else
+		return 1;
 }
 
 int colour_detect_2(IplImage* frame,CvSeq* result) //if arrow and shape present
@@ -23,44 +22,38 @@ int colour_detect_2(IplImage* frame,CvSeq* result) //if arrow and shape present
 	IplImage *imgHSV= cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 3);
 	cvCvtColor(frame, imgHSV, CV_BGR2HSV);
 	CvPoint *pt[1];
-   pt[0] = (CvPoint*)cvGetSeqElem(result, 0);
-			if (co_inc==0)
-			{
-				if(dir=='l')
-				pt[0]->x=pt[0]->x+10;
-				else 
-					pt[0]->x=pt[0]->x-10;
-			}
-			else
-			{
-				 if(result->total==4)
-					pt[0]->x=pt[0]->x+10;
-					pt[0]->y=pt[0]->y+10;
-			}
-				CvScalar s=cvGet2D(imgHSV,pt[0]->y,pt[0]->x);
-				cout<<"\npixels color:"<<pt[0]->x<<","<<pt[0]->y;
-				
-					 cout<<"values :"<<s.val[0]<<","<<s.val[1]<<","<<s.val[2]<<endl;
-   
-					 
-				if(s.val[1]>=160 && s.val[1]<256 && s.val[2]>=70 && s.val[2]<256)
-				{
-					
-					if(s.val[0]>=38 && s.val[0]<75)
-					{
-					
-						return 2;
-					}
-					else if(s.val[0]>=90 && s.val[0]<130)
-					{
-						return 1;
-					}
-					else
-					{
-						return 3;
-					}
-				}
-			
-
+   	pt[0] = (CvPoint*)cvGetSeqElem(result, 0);
+	if (co_inc==0)
+	{
+		if(dir=='l')
+			pt[0]->x=pt[0]->x+10;
+		else 
+			pt[0]->x=pt[0]->x-10;
+	}
+	else
+	{
+		if(result->total==4)
+			pt[0]->x=pt[0]->x+10;
+			pt[0]->y=pt[0]->y+10;
+	}
+	CvScalar s=cvGet2D(imgHSV,pt[0]->y,pt[0]->x);
+	cout<<"\npixels color:"<<pt[0]->x<<","<<pt[0]->y;
+	cout<<"values :"<<s.val[0]<<","<<s.val[1]<<","<<s.val[2]<<endl;
+   	if(s.val[1]>=160 && s.val[1]<256 && s.val[2]>=70 && s.val[2]<256)
+	{
+		if(s.val[0]>=38 && s.val[0]<75)
+		{
+			return 2;
+		}
+		else if(s.val[0]>=90 && s.val[0]<130)
+		{
+			return 1;
+		}
+		else
+		{
+			return 3;
+		}
+	
+	}
+        
 }
-
