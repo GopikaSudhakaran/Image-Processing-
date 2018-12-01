@@ -12,7 +12,6 @@
 #include <tserial.h>
 #include <bot_control.h>
 
-
 using namespace std;
 using namespace cv; //serial is a class type defined in these files, used for referring to the communication device
 serial comm;
